@@ -1,0 +1,162 @@
+.pricingContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 120px 40px 80px;
+}
+
+.pricingHeader {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.pricingLabel {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.pricingTitle {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+  line-height: 1.1;
+}
+
+.pricingSubtitle {
+  font-size: 1.125rem;
+  color: #888;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+.pricingGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: #222;
+  border: 1px solid #222;
+}
+
+.pricingCard {
+  background: #0a0a0a;
+  padding: 40px 32px;
+  position: relative;
+  transition: background 0.3s;
+}
+
+.pricingCard:hover {
+  background: #111;
+}
+
+.pricingCardFeatured {
+  background: #111;
+}
+
+.pricingCardFeatured::before {
+  content: 'POPULAR';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 8px;
+  background: #c0fe04;
+  color: #000;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-align: center;
+}
+
+.pricingCard h3 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 24px;
+  color: #888;
+}
+
+.pricingAmount {
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  margin-bottom: 8px;
+  line-height: 1;
+}
+
+.currency {
+  font-size: 1.5rem;
+  vertical-align: super;
+  margin-right: 4px;
+}
+
+.pricingPeriod {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 32px;
+}
+
+.pricingFeatures {
+  list-style: none;
+  margin-bottom: 32px;
+}
+
+.pricingFeatures li {
+  padding: 10px 0;
+  font-size: 0.875rem;
+  color: #888;
+  border-bottom: 1px solid #222;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.pricingFeatures li::before {
+  content: '→';
+  color: #c0fe04;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+}
+
+.fullWidth {
+  width: 100%;
+  justify-content: center;
+}
+
+.guarantee {
+  text-align: center;
+  margin-top: 60px;
+  padding: 40px;
+  border: 1px solid #222;
+}
+
+.guaranteeText {
+  font-size: 0.9375rem;
+  color: #888;
+}
+
+@media (max-width: 1024px) {
+  .pricingGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .pricingGrid {
+    grid-template-columns: 1fr;
+  }
+  .pricingContainer {
+    padding: 100px 20px 60px;
+  }
+}

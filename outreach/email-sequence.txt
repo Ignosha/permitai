@@ -1,0 +1,153 @@
+# Cold Outreach Templates
+
+## Email Sequence for Contractors
+
+### Email 1: The Hook (Day 0)
+**Subject:** How do you handle permits for [City] projects?
+**Subject alt:** Question about your permit process
+
+Hi [First Name],
+
+I noticed your company does a lot of [type of work, e.g., bathroom remodels / deck builds / HVAC installs] in [City/Area].
+
+Quick question: how much time does your team spend per project on permit research and application prep? I ask because most contractors I talk to say 5-15 hours per job.
+
+I built a tool called PermitAI that uses AI to:
+- Look up exactly which permits you need for any project
+- Fill out the application forms for you
+- Check your plans against local building codes before submission
+
+Most contractors using it cut their permit time from 1-2 weeks down to 1-2 days.
+
+Worth a 10-minute demo? Or would you prefer I just send you a sample permit analysis for one of your recent projects?
+
+Best,
+[Your Name]
+PermitAI.co
+
+---
+
+### Email 2: The Social Proof (Day 3)
+**Subject:** 92% first-pass approval rate (for [Competitor/Industry])
+
+Hi [First Name],
+
+Following up on my last note about PermitAI.
+
+I just wanted to share a quick stat: contractors using PermitAI are getting **92% first-pass approval rates** on permit applications, compared to the industry average of ~60-70%.
+
+For a typical $50k bathroom remodel, a 2-week permit delay costs roughly $5,000+ in indirect costs (crew idle time, project manager overhead, client communication).
+
+Most of our customers say PermitAI pays for itself on the very first project.
+
+Can I send you a free sample analysis for one of your upcoming jobs? No strings attached.
+
+Best,
+[Your Name]
+
+---
+
+### Email 3: The Breakup (Day 7)
+**Subject:** I'll stop emailing after this one
+
+Hi [First Name],
+
+I don't want to be annoying, so this is my last note on PermitAI.
+
+If permit delays are a pain point for your team, we're here when you're ready. We have a 14-day free trial (no credit card required), so there's zero risk to trying it out.
+
+If not, no worries at all. I'll remove you from my outreach list.
+
+Wishing you quick permits and smooth projects,
+[Your Name]
+
+---
+
+## LinkedIn Message Templates
+
+### Connection Request (300 characters)
+> Hi [Name], I help contractors in [Area] cut their permit time from 2 weeks to 2 days using AI. Would love to connect and share what we're building.
+
+### InMail / Direct Message (After Connection)
+> Hi [Name],
+>
+> Saw your recent post about [specific project or pain point they mentioned] - congrats on the work you're doing in [Area].
+>
+> I'm reaching out because I built PermitAI, an AI tool that handles permit research and application prep for contractors.
+>
+> Most of the contractors I work with in [Area] say they waste 10-15 hours per job on permits, and the approval cycle takes 2-4 weeks.
+>
+> Worth a 10-minute call this week to see if it could help your team? I can even send a free sample analysis for one of your current projects.
+>
+> Best,
+> [Your Name]
+
+### Follow-Up (If No Reply After 1 Week)
+> Hi [Name],
+>
+> Quick follow-up on my note about PermitAI.
+>
+> We just added [City/Area] to our coverage map and are onboarding 5 new contractors from the area this week.
+>
+> Still worth a quick chat? Happy to send a free sample analysis if email is easier.
+>
+> [Your Name]
+
+---
+
+## Targeting Criteria
+
+### Ideal Contractor Profile
+- **Company size**: 2-20 employees
+- **Specialty**: Residential remodelers, general contractors, deck builders, kitchen & bath, roofing, HVAC, plumbing, electrical
+- **Location**: Suburban areas with active construction (search "permit delays in [City]" on LinkedIn/Twitter)
+- **Signals**: 
+  - Posts about projects or jobs
+  - Mentions permit frustrations
+  - Active in local contractor groups
+
+### Where to Find Them
+1. **LinkedIn**: Search "general contractor [City]" or "licensed contractor [City]"
+2. **Nextdoor / Facebook Groups**: Local contractor groups
+3. **Houzz Pro / BuildZoom**: Contractor directories
+4. **Twitter/X**: Search "permit" + "[City]" to find complaining contractors
+5. **Angi / HomeAdvisor**: Top-rated contractors in your area
+
+### Outreach Volume
+- **Goal**: 100 prospects/day
+- **Breakdown**:
+  - 50 LinkedIn connection requests
+  - 30 cold emails
+  - 20 Twitter/Facebook DMs
+- **Expected conversion**: 1-2% to demo → 1-2 customers per day → 30-60 customers in first month
+
+---
+
+## Email Subject Lines That Work
+
+1. How do you handle permits for [City] projects?
+2. Question about your permit process
+3. Saw your recent [project type] in [City]
+4. 92% first-pass permit approval rate
+5. How to cut permit time from 2 weeks to 2 days
+6. Free sample permit analysis for [Company]
+7. [Mutual connection] suggested I reach out
+8. Quick question about your [specific project type] work
+9. Contractors in [City] are saving 10+ hours per project
+10. I'll stop emailing after this one (breakup)
+
+---
+
+## Objection Handling
+
+### "We already have a permit person / process"
+> That's great. PermitAI isn't designed to replace your permit specialist — it's designed to make them 10x more productive. Most of our customers use it to handle 80% of routine permits so their team can focus on complex projects.
+
+### "We don't do enough projects to justify the cost"
+> That's exactly why we built PermitAI. The Solo plan is $49/month — less than 1 hour of labor. On your next project, it'll save you 10+ hours and likely prevent a rejected submission that costs $500+ in fees and delays.
+
+### "I don't trust AI for permit applications"
+> Understandable. That's why we built a "Review Before Submit" workflow. AI drafts the application, but you (or your permit specialist) review and approve before submission. Our 92% first-pass rate speaks for itself.
+
+### "We're too busy to try something new"
+> I hear that a lot. That's exactly why PermitAI exists — because you're too busy to spend 15 hours on permits. The setup takes 5 minutes, and the AI does the rest. You can try it free for 14 days with zero commitment.

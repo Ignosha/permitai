@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PermitAI — Permit Intelligence, Reimagined</title>
+    <meta name="description" content="AI-powered permit applications. Cut research time from 15 hours to 15 minutes. 92% first-pass approval rate.">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+        :root {
+            --bg: #0a0a0a;
+            --bg-elevated: #111111;
+            --text-primary: #fafafa;
+            --text-secondary: #888888;
+            --text-muted: #555555;
+            --accent: #C0FE04;
+            --accent-dim: #a8d904;
+            --border: #222222;
+            --border-hover: #333333;
+            --selection: #C0FE04;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+            background: var(--bg);
+            color: var(--text-primary);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        /* Canvas background */
+        #bg-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Selection */
+        ::selection {
+            background: var(--selection);
+            color: #000;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+        /* Loading bar */
+        #loading-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 2px;
+            background: var(--accent);
+            z-index: 1000;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            mix-blend-mode: difference;
+        }
+
+        .logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            color: var(--text-primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        .nav-links a::before {
+            content: '';
+            position: absolute;
+            inset: -4px -8px;
+            border: 2px dotted transparent;
+            transition: border-color 0.2s;
+            pointer-events: none;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-links a:hover::before {
+            border-color: var(--text-primary);
+        }
+
+        .nav-cta {
+            padding: 10px 24px;
+            background: var(--text-primary);
+            color: var(--bg);
+            border-radius: 0;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .nav-cta:hover {
+            background: var(--accent);
+            color: #000;
+        }
+
+        /* Main content wrapper */
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            padding: 120px 40px 80px;
+            position: relative;
+        }
+
+        .hero-left {
+            grid-column: 1 / 6;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding-bottom: 40px;
+        }
+
+        .hero-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hero-label::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 900;
+            line-height: 0.95;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
+            margin-bottom: 32px;
+        }
+
+        .hero-title .accent {
+            color: var(--accent);
+            font-style: italic;
+        }
+
+        .hero-description {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            max-width: 400px;
+            line-height: 1.7;
+            margin-bottom: 40px;
+        }
+
+        .hero-cta-group {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-dim);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-primary);
+            background: rgba(255,255,255,0.02);
+        }
+
+        .hero-right {
+            grid-column: 7 / 13;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding-bottom: 40px;
+        }
+
+        .hero-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .hero-meta .value {
+            color: var(--accent);
+        }
+
+        /* Marquee */
+        .marquee {
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .marquee-content {
+            display: inline-flex;
+            animation: marquee 30s linear infinite;
+        }
+
+        .marquee-item {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0 40px;
+            display: inline-flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .marquee-item::after {
+            content: '✦';
+            color: var(--accent);
+            font-size: 0.75rem;
+        }
+
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 120px 40px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stat-item {
+            position: relative;
+        }
+
+        .stat-number {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            line-height: 1;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .stat-number .accent {
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Projects / Features Grid */
+        .projects {
+            padding: 120px 40px;
+        }
+
+        .section-header {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 40px;
+            margin-bottom: 80px;
+            align-items: end;
+        }
+
+        .section-label {
+            grid-column: 1 / 3;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .section-title {
+            grid-column: 3 / 9;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        .section-desc {
+            grid-column: 9 / 13;
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+            line-height: 1.7;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 20px;
+        }
+
+        .project-card {
+            position: relative;
+            border: 1px solid var(--border);
+            padding: 32px;
+            transition: all 0.3s;
+            cursor: pointer;
+            background: var(--bg);
+        }
+
+        .project-card:hover {
+            border-color: var(--text-primary);
+            transform: translateY(-4px);
+        }
+
+        .project-card.large {
+            grid-column: span 8;
+            min-height: 400px;
+        }
+
+        .project-card.medium {
+            grid-column: span 4;
+            min-height: 400px;
+        }
+
+        .project-card.wide {
+            grid-column: span 6;
+            min-height: 300px;
+        }
+
+        .project-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: var(--accent);
+            color: #000;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 24px;
+        }
+
+        .project-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            letter-spacing: -0.01em;
+        }
+
+        .project-card p {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .project-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .project-meta .arrow {
+            color: var(--accent);
+            transition: transform 0.2s;
+        }
+
+        .project-card:hover .project-meta .arrow {
+            transform: translate(4px, -4px);
+        }
+
+        .project-visual {
+            position: absolute;
+            bottom: 32px;
+            right: 32px;
+            width: 120px;
+            height: 120px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 120px 40px;
+            border-top: 1px solid var(--border);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+        }
+
+        .pricing-card {
+            background: var(--bg);
+            padding: 40px 32px;
+            position: relative;
+            transition: background 0.3s;
+        }
+
+        .pricing-card:hover {
+            background: var(--bg-elevated);
+        }
+
+        .pricing-card.featured {
+            background: var(--bg-elevated);
+        }
+
+        .pricing-card.featured::before {
+            content: 'CURRENT PLAN';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 8px;
+            background: var(--accent);
+            color: #000;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-align: center;
+        }
+
+        .pricing-card h3 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 24px;
+            color: var(--text-secondary);
+        }
+
+        .pricing-amount {
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+
+        .pricing-amount .currency {
+            font-size: 1.5rem;
+            vertical-align: super;
+            margin-right: 4px;
+        }
+
+        .pricing-period {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 32px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 32px;
+        }
+
+        .pricing-features li {
+            padding: 10px 0;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .pricing-features li::before {
+            content: '→';
+            color: var(--accent);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+        }
+
+        .pricing-card .btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 120px 40px;
+            border-top: 1px solid var(--border);
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+        }
+
+        .testimonial {
+            background: var(--bg);
+            padding: 40px;
+        }
+
+        .testimonial-text {
+            font-size: 1.125rem;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            font-weight: 400;
+        }
+
+        .testimonial-author {
+            font-weight: 700;
+            font-size: 0.9375rem;
+            margin-bottom: 4px;
+        }
+
+        .testimonial-role {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* FAQ */
+        .faq {
+            padding: 120px 40px;
+            border-top: 1px solid var(--border);
+        }
+
+        .faq-list {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .faq-question {
+            padding: 32px 0;
+            font-size: 1.25rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.2s;
+        }
+
+        .faq-question:hover {
+            color: var(--accent);
+        }
+
+        .faq-question::after {
+            content: '+';
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.5rem;
+            color: var(--accent);
+            transition: transform 0.2s;
+        }
+
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            padding-bottom: 32px;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 160px 40px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            position: relative;
+        }
+
+        .cta-title {
+            font-size: clamp(3rem, 8vw, 8rem);
+            font-weight: 900;
+            line-height: 0.95;
+            letter-spacing: -0.03em;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+        }
+
+        .cta-title .accent {
+            color: var(--accent);
+            font-style: italic;
+        }
+
+        .cta-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 48px;
+            line-height: 1.7;
+        }
+
+        /* Footer */
+        footer {
+            padding: 80px 40px 40px;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        .footer-brand {
+            grid-column: 1 / 5;
+        }
+
+        .footer-brand .logo {
+            font-size: 1rem;
+            margin-bottom: 24px;
+            display: block;
+        }
+
+        .footer-brand p {
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
+            line-height: 1.7;
+            max-width: 300px;
+        }
+
+        .footer-links {
+            grid-column: 5 / 13;
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .footer-column h4 {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+        }
+
+        .footer-column a {
+            display: block;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9375rem;
+            padding: 6px 0;
+            transition: color 0.2s;
+        }
+
+        .footer-column a:hover {
+            color: var(--accent);
+        }
+
+        .footer-bottom {
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-bottom p {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .footer-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .footer-status::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--accent);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        /* Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+
+        /* Mobile */
+        @media (max-width: 1024px) {
+            .hero { grid-template-columns: 1fr; }
+            .hero-left, .hero-right { grid-column: 1; padding: 0; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+            .testimonials-grid { grid-template-columns: 1fr; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .project-card.large, .project-card.medium, .project-card.wide { grid-column: span 1; }
+            .section-header { grid-template-columns: 1fr; }
+            .section-title, .section-desc, .section-label { grid-column: 1; }
+            .footer-top { grid-template-columns: 1fr; }
+            .footer-links { grid-column: 1; flex-direction: column; }
+            header { padding: 16px 20px; }
+            .hero, .stats, .projects, .pricing, .testimonials, .faq, .cta, footer { padding-left: 20px; padding-right: 20px; }
+            .nav-links { display: none; }
+        }
+
+        @media (max-width: 640px) {
+            .stats { grid-template-columns: 1fr; }
+            .pricing-grid { grid-template-columns: 1fr; }
+            .hero-title { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading-bar"></div>
+    <canvas id="bg-canvas"></canvas>
+
+    <header>
+        <div class="logo">PermitAI</div>
+        <nav class="nav-links">
+            <a href="#capabilities">Capabilities</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#proof">Proof</a>
+            <a href="#faq">FAQ</a>
+            <a href="#cta" class="nav-cta">Start Free Trial</a>
+        </nav>
+    </header>
+
+    <main class="content">
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-left">
+                <div class="hero-label reveal">Now serving 500+ US cities</div>
+                <h1 class="hero-title reveal reveal-delay-1">
+                    Permit<br>
+                    <span class="accent">Intelligence</span>,<br>
+                    Reimagined
+                </h1>
+                <p class="hero-description reveal reveal-delay-2">
+                    AI that reads local codes, drafts applications, and checks compliance before you submit. Cut permit time from 15 hours to 15 minutes. 92% first-pass approval rate.
+                </p>
+                <div class="hero-cta-group reveal reveal-delay-3">
+                    <a href="#cta" class="btn btn-primary">Start Free Trial</a>
+                    <a href="#capabilities" class="btn btn-secondary">Explore Capabilities</a>
+                </div>
+            </div>
+            <div class="hero-right">
+                <div class="hero-meta reveal reveal-delay-4">
+                    <div>Version 2.0 — <span class="value">LIVE</span></div>
+                    <div style="margin-top: 8px;">Permits processed: <span class="value">12,847</span></div>
+                    <div style="margin-top: 8px;">Avg. approval time: <span class="value">48hrs</span></div>
+                    <div style="margin-top: 8px;">First-pass rate: <span class="value">92.4%</span></div>
+                    <div style="margin-top: 8px;">Uptime: <span class="value">99.9%</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Marquee -->
+        <div class="marquee">
+            <div class="marquee-content">
+                <span class="marquee-item">Permit Finder</span>
+                <span class="marquee-item">Application Drafter</span>
+                <span class="marquee-item">Code Compliance</span>
+                <span class="marquee-item">Document Checklist</span>
+                <span class="marquee-item">Instant Revisions</span>
+                <span class="marquee-item">Plain English</span>
+                <span class="marquee-item">Permit Finder</span>
+                <span class="marquee-item">Application Drafter</span>
+                <span class="marquee-item">Code Compliance</span>
+                <span class="marquee-item">Document Checklist</span>
+                <span class="marquee-item">Instant Revisions</span>
+                <span class="marquee-item">Plain English</span>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <section class="stats">
+            <div class="stat-item reveal">
+                <div class="stat-number">15<span class="accent">+</span></div>
+                <div class="stat-label">Hours saved per project</div>
+            </div>
+            <div class="stat-item reveal reveal-delay-1">
+                <div class="stat-number">48<span class="accent">hrs</span></div>
+                <div class="stat-label">Average approval time</div>
+            </div>
+            <div class="stat-item reveal reveal-delay-2">
+                <div class="stat-number">92<span class="accent">%</span></div>
+                <div class="stat-label">First-pass approval rate</div>
+            </div>
+            <div class="stat-item reveal reveal-delay-3">
+                <div class="stat-number">$5K<span class="accent">+</span></div>
+                <div class="stat-label">Avg. project value saved</div>
+            </div>
+        </section>
+
+        <!-- Capabilities / Projects -->
+        <section id="capabilities" class="projects">
+            <div class="section-header">
+                <div class="section-label reveal">// Capabilities</div>
+                <h2 class="section-title reveal reveal-delay-1">Everything you need to get permits faster.</h2>
+                <p class="section-desc reveal reveal-delay-2">Six core capabilities designed to eliminate the permit bottleneck. From research to submission, AI handles the heavy lifting.</p>
+            </div>
+
+            <div class="projects-grid">
+                <div class="project-card large reveal">
+                    <span class="project-tag">Core Feature</span>
+                    <h3>Permit Finder</h3>
+                    <p>Enter project details and zip code. AI returns exactly which permits you need, from which department, with fees and processing times.</p>
+                    <div class="project-meta">
+                        <span>500+ cities covered</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+
+                <div class="project-card medium reveal reveal-delay-1">
+                    <span class="project-tag">AI Drafting</span>
+                    <h3>Application Drafter</h3>
+                    <p>Upload photos, describe your project. AI fills out forms with correct technical terminology.</p>
+                    <div class="project-meta">
+                        <span>10+ permit types</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+
+                <div class="project-card wide reveal reveal-delay-2">
+                    <span class="project-tag">Compliance</span>
+                    <h3>Code Compliance Checker</h3>
+                    <p>AI checks your project against local building codes before submission. Flags issues that would cause rejections.</p>
+                    <div class="project-meta">
+                        <span>IBC / IRC + local amendments</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+
+                <div class="project-card wide reveal reveal-delay-3">
+                    <span class="project-tag">Documents</span>
+                    <h3>Smart Document Checklist</h3>
+                    <p>Customized list of required documents with explanations of what each needs to contain.</p>
+                    <div class="project-meta">
+                        <span>Auto-generated per project</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+
+                <div class="project-card wide reveal reveal-delay-4">
+                    <span class="project-tag">Translation</span>
+                    <h3>Plain English Translator</h3>
+                    <p>Building codes rewritten in plain English. No more lawyer-speak, no more confusion.</p>
+                    <div class="project-meta">
+                        <span>Instant explanations</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+
+                <div class="project-card wide reveal">
+                    <span class="project-tag">Speed</span>
+                    <h3>Instant Revisions</h3>
+                    <p>Reviewer requests changes? AI instantly revises and explains what changed and why.</p>
+                    <div class="project-meta">
+                        <span>48hr turnaround</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing -->
+        <section id="pricing" class="pricing">
+            <div class="section-header">
+                <div class="section-label reveal">// Pricing</div>
+                <h2 class="section-title reveal reveal-delay-1">Simple, transparent pricing.</h2>
+                <p class="section-desc reveal reveal-delay-2">Start free. Upgrade when ready. No contracts, cancel anytime.</p>
+            </div>
+
+            <div class="pricing-grid reveal reveal-delay-3">
+                <div class="pricing-card">
+                    <h3>DIY Homeowner</h3>
+                    <div class="pricing-amount"><span class="currency">$</span>9.99</div>
+                    <div class="pricing-period">per month</div>
+                    <ul class="pricing-features">
+                        <li>1 active project</li>
+                        <li>Permit finder</li>
+                        <li>Application drafter</li>
+                        <li>Document checklist</li>
+                        <li>Email support</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-secondary">Start Free Trial</a>
+                </div>
+
+                <div class="pricing-card featured">
+                    <h3>Solo Contractor</h3>
+                    <div class="pricing-amount"><span class="currency">$</span>49</div>
+                    <div class="pricing-period">per month</div>
+                    <ul class="pricing-features">
+                        <li>5 active projects</li>
+                        <li>Everything in DIY</li>
+                        <li>Code compliance checker</li>
+                        <li>Priority support</li>
+                        <li>Team sharing (2 users)</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-primary">Start Free Trial</a>
+                </div>
+
+                <div class="pricing-card">
+                    <h3>Small Team</h3>
+                    <div class="pricing-amount"><span class="currency">$</span>149</div>
+                    <div class="pricing-period">per month</div>
+                    <ul class="pricing-features">
+                        <li>Unlimited projects</li>
+                        <li>Everything in Solo</li>
+                        <li>Instant revisions</li>
+                        <li>Priority support</li>
+                        <li>Team sharing (10 users)</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-secondary">Start Free Trial</a>
+                </div>
+
+                <div class="pricing-card">
+                    <h3>Pro</h3>
+                    <div class="pricing-amount"><span class="currency">$</span>299</div>
+                    <div class="pricing-period">per month</div>
+                    <ul class="pricing-features">
+                        <li>Everything in Small Team</li>
+                        <li>Unlimited users</li>
+                        <li>Custom integrations</li>
+                        <li>Dedicated support</li>
+                        <li>SLA guarantee</li>
+                    </ul>
+                    <a href="#cta" class="btn btn-secondary">Contact Sales</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <section id="proof" class="testimonials">
+            <div class="section-header">
+                <div class="section-label reveal">// Proof</div>
+                <h2 class="section-title reveal reveal-delay-1">Trusted by contractors & homeowners.</h2>
+            </div>
+
+            <div class="testimonials-grid reveal reveal-delay-2">
+                <div class="testimonial">
+                    <div class="testimonial-text">"I used to spend half a day every week on permit research. PermitAI cut that to 20 minutes. First-time approval rate went from 60% to 95%. This tool pays for itself on the first project."</div>
+                    <div class="testimonial-author">Mike R.</div>
+                    <div class="testimonial-role">Licensed General Contractor, Austin TX</div>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-text">"As a DIYer, permits terrified me. The language, the forms, the fear of getting it wrong. PermitAI walked me through my kitchen remodel step-by-step. Permit approved in 3 days with zero corrections."</div>
+                    <div class="testimonial-author">Sarah K.</div>
+                    <div class="testimonial-role">Homeowner, Denver CO</div>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-text">"We run 15-20 projects a month. PermitAI saves my project managers 10+ hours each week. That's $3,000+ in recovered labor every month. Best tool we've added this year."</div>
+                    <div class="testimonial-author">David T.</div>
+                    <div class="testimonial-role">Owner, Summit Construction, Phoenix AZ</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section id="faq" class="faq">
+            <div class="section-header">
+                <div class="section-label reveal">// FAQ</div>
+                <h2 class="section-title reveal reveal-delay-1">Common questions.</h2>
+            </div>
+
+            <div class="faq-list reveal reveal-delay-2">
+                <div class="faq-item">
+                    <div class="faq-question">Does PermitAI work in my city?</div>
+                    <div class="faq-answer">We currently cover 500+ cities and counties across the US, with new locations added weekly. During your free trial, you can check if your area is supported. If not, we'll add it within 7 days of your request.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is the AI-generated application accurate enough to submit?</div>
+                    <div class="faq-answer">Yes. Our AI is trained on thousands of approved permit applications and continuously updated with local code changes. 92% of our applications pass first-time review. We always recommend a quick human review before submission.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">What if my permit gets rejected?</div>
+                    <div class="faq-answer">We offer a "Rejection Rescue" feature that instantly analyzes the reviewer's comments, makes corrections, and resubmits. Most resubmissions are approved within 48 hours.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Can I cancel anytime?</div>
+                    <div class="faq-answer">Absolutely. No contracts, no commitments. Cancel with one click and you'll retain access until the end of your billing period.</div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">Is my project data secure?</div>
+                    <div class="faq-answer">Yes. We use bank-level encryption (AES-256) for all data. Your project details and documents are never shared with third parties. We're SOC 2 Type II compliant.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section id="cta" class="cta">
+            <h2 class="cta-title reveal">
+                Stop waiting<br>
+                <span class="accent">on permits.</span>
+            </h2>
+            <p class="cta-subtitle reveal reveal-delay-1">Join 2,000+ contractors and homeowners who cut their permit time by 80%. Start your free trial today.</p>
+            <a href="#" class="btn btn-primary reveal reveal-delay-2" onclick="alert('Demo mode: In production, this would start a free trial or checkout flow.')">Start Your Free Trial</a>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <span class="logo">PermitAI</span>
+                    <p>AI-powered permit applications for the modern contractor. Built with craft and care.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <a href="#capabilities">Capabilities</a>
+                        <a href="#pricing">Pricing</a>
+                        <a href="#proof">Proof</a>
+                        <a href="#faq">FAQ</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Company</h4>
+                        <a href="#">About</a>
+                        <a href="#">Contact</a>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Connect</h4>
+                        <a href="#">Twitter / X</a>
+                        <a href="#">LinkedIn</a>
+                        <a href="#">GitHub</a>
+                        <a href="#">Email</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 PermitAI. All rights reserved.</p>
+                <div class="footer-status">All systems operational</div>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        // Loading bar
+        window.addEventListener('load', () => {
+            const bar = document.getElementById('loading-bar');
+            bar.style.width = '100%';
+            setTimeout(() => { bar.style.opacity = '0'; }, 500);
+        });
+
+        // Reveal animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                const wasActive = item.classList.contains('active');
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+                if (!wasActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href === '#cta') {
+                    e.preventDefault();
+                    document.querySelector('.cta').scrollIntoView({ behavior: 'smooth' });
+                } else if (href !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+
+        // Canvas background - subtle grid/noise
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Draw subtle dot grid
+        function drawGrid() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.03)';
+            const spacing = 40;
+            for (let x = 0; x < canvas.width; x += spacing) {
+                for (let y = 0; y < canvas.height; y += spacing) {
+                    ctx.beginPath();
+                    ctx.arc(x, y, 1, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+            requestAnimationFrame(drawGrid);
+        }
+        drawGrid();
+
+        // Mouse interaction - subtle glow
+        let mouseX = 0, mouseY = 0;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+    </script>
+</body>
+</html>

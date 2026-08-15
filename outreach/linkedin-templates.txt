@@ -1,0 +1,181 @@
+# LinkedIn Outreach Templates
+
+## Connection Request Templates
+
+### Template 1: Contractor-Focused
+> Hi [Name], I help contractors in [Area] cut their permit time from 2 weeks to 2 days using AI. Would love to connect and share what we're building.
+
+### Template 2: Project-Specific
+> Hi [Name], saw your recent [deck/kitchen/bathroom] project in [City] - looks great. I built an AI tool that helps with permits for that exact type of work. Worth connecting?
+
+### Template 3: Pain Point
+> Hi [Name], I noticed you mentioned permit delays in a recent post. I built a tool that solves that exact problem for contractors in [Area]. Would love to connect.
+
+---
+
+## InMail / Direct Message Templates
+
+### Template 1: Direct Value Proposition
+> Hi [Name],
+>
+> Saw your recent post about [specific project or pain point they mentioned] - great work you're doing in [Area].
+>
+> I'm reaching out because I built PermitAI, an AI tool that handles permit research and application prep for contractors.
+>
+> Most contractors I work with waste 10-15 hours per job on permits, and the approval cycle takes 2-4 weeks.
+>
+> Worth a 10-minute call this week to see if it could help your team? I can even send a free sample analysis for one of your current projects.
+>
+> Best,
+> [Your Name]
+
+### Template 2: Sample Offer
+> Hi [Name],
+>
+> Quick question: do you have any upcoming [type of work] projects in [City]?
+>
+> I built a tool called PermitAI that uses AI to look up permits, fill out applications, and check code compliance.
+>
+> I'd love to send you a free sample analysis for one of your upcoming jobs. No sales pitch — just a helpful example of what's possible.
+>
+> If it's useful, great. If not, no hard feelings.
+>
+> [Your Name]
+
+### Template 3: Peer Referral
+> Hi [Name],
+>
+> [Mutual Connection] suggested I reach out. They mentioned you're doing some great work with [type of projects] in [Area].
+>
+> I'm building PermitAI, an AI tool that cuts permit time from 2 weeks to 2 days for contractors. [Mutual Connection] has been beta testing it and says it's saved their team 10+ hours per project.
+>
+> Would love to share a free sample with you if you're interested.
+>
+> Best,
+> [Your Name]
+
+---
+
+## Follow-Up Templates
+
+### Follow-Up 1 (Day 7, no reply)
+> Hi [Name],
+>
+> Quick follow-up on my note about PermitAI.
+>
+> We just added [City/Area] to our coverage map and are onboarding 5 new contractors from the area this week.
+>
+> Still worth a quick chat? Happy to send a free sample analysis if email is easier.
+>
+> [Your Name]
+
+### Follow-Up 2 (Day 14, no reply)
+> Hi [Name],
+>
+> Last note from me on this — I know how busy you are.
+>
+> If permit delays ever become a pain point, we're here. Free 14-day trial, no credit card required.
+>
+> Wishing you quick permits and smooth projects,
+> [Your Name]
+
+---
+
+## Post Templates (For Your Own LinkedIn Feed)
+
+### Post 1: Pain Point
+> 🛑 PSA for contractors in [City]:
+>
+> I analyzed 50 recent permit applications in [City] and found that 38% were rejected on first submission.
+>
+> The #1 reason? Missing or incomplete documentation.
+>
+> The #2 reason? Not understanding local code requirements.
+>
+> The average delay? 2.4 weeks. The average cost of that delay? $5,200 in indirect costs.
+>
+> There's a better way. AI can handle the research, draft the applications, and check for compliance before you submit.
+>
+> I built a tool called PermitAI that does exactly this. 92% first-pass approval rate. 10+ hours saved per project.
+>
+> If you're tired of permit delays, DM me "PERMIT" and I'll send you a free sample analysis.
+>
+> #Construction #Contractors #Permits #BuildingCodes
+
+### Post 2: Social Proof
+> 📈 Quick win from a PermitAI customer:
+>
+> "We used to spend 10-15 hours per project on permit research and application prep. With PermitAI, it's down to 90 minutes. And our first-pass approval rate went from 65% to 94%."
+>
+> — David T., Summit Construction, Phoenix AZ
+>
+> The tool isn't replacing their permit specialist — it's making them 10x more productive.
+>
+> If you're a contractor tired of permit delays, DM me "DEMO" for a free walkthrough.
+>
+> #ConstructionTech #Contractors #Permits #AI
+
+### Post 3: Educational
+> 🏠 5 things every contractor should know about permits in [City]:
+>
+> 1. [City] requires permits for ANY structural change, including decks over 30 inches
+> 2. The average permit takes 2.3 weeks for review — plan accordingly
+> 3. 38% of first submissions are rejected for missing documents
+> 4. [Specific local code requirement]
+> 5. [Another local insight]
+>
+> I built a free tool that tells you exactly which permits you need for any project in [City], with direct links to applications and fee schedules.
+>
+> Link in comments / DM me "PERMIT" to try it.
+>
+> #Construction #Contractors #Permits #[City]
+
+---
+
+## LinkedIn Search Queries to Find Prospects
+
+Use these in LinkedIn Sales Navigator or regular search:
+
+1. "general contractor" "Austin" "residential"
+2. "licensed contractor" "kitchen remodel" "Denver"
+3. "construction company owner" "Phoenix"
+4. "project manager" "residential construction" "Seattle"
+5. "roofing contractor" "Dallas"
+6. "deck builder" "Portland"
+7. "HVAC contractor" "Atlanta"
+8. "licensed plumber" "Miami"
+9. "electrician" "Nashville"
+10. "home remodeler" "San Diego"
+
+### Advanced Filters
+- **Industry**: Construction
+- **Company headcount**: 1-50
+- **Title**: Owner, Founder, Project Manager, Superintendent, Operations Manager
+- **Location**: Target cities with active construction
+- **Groups**: Member of local contractor associations (e.g., NAHB, local home builder associations)
+
+---
+
+## Daily Outreach Routine
+
+### Morning (30 min)
+- 20 LinkedIn connection requests
+- 10 personalized InMails
+- Review and respond to any replies
+
+### Afternoon (30 min)
+- 20 cold emails (use Email 1 template)
+- 10 Twitter/Facebook DMs to contractors
+- Follow up on any pending conversations
+
+### Weekly (2 hours)
+- Engage with 20 contractor posts (like, comment thoughtfully)
+- Share 2-3 posts on your own feed
+- Update CRM (Google Sheet) with leads and status
+
+### Expected Results
+- 100 touches/day × 22 days = 2,200/month
+- 1-2% response rate = 22-44 responses
+- 20-30% of responses book demo = 4-13 demos
+- 30-40% of demos convert = 1-5 customers/week
+- **Month 1 target**: 10-20 customers
