@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import SplineScene from '@/components/spline-scene';
 import WaveDivider from '@/components/wave-divider';
 import AnalyticsTracker from '@/components/analytics-tracker';
 import SEOHead from '@/components/seo-head';
@@ -28,8 +27,8 @@ export default function Home() {
     const hashVal = '#';
     document.querySelectorAll('a[' + hashAttr + '^="' + hashVal + '"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
-        const href = this.getAttribute('href');
-        if (href && href.startsWith('#') && href.length > 1) {
+        const href = this.getAttribute(hashAttr);
+        if (href && href.startsWith(hashVal) && href.length > 1) {
           e.preventDefault();
           const target = document.querySelector(href);
           if (target) target.scrollIntoView({ behavior: 'smooth' });
@@ -110,6 +109,17 @@ export default function Home() {
           .hero-description { font-size: 1rem; color: #888; max-width: 400px; line-height: 1.7; margin-bottom: 40px; }
           .hero-cta-group { display: flex; gap: 16px; flex-wrap: wrap; }
           .hero-right { grid-column: 7 / 13; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 40px; }
+          .hero-3d { position: relative; min-height: 400px; border-radius: 1rem; overflow: hidden; border: 1px solid #222; background: linear-gradient(135deg, #0a0a0a 0%, #111 100%); }
+          .hero-3d-inner { position: absolute; inset: 0; display: flex; align-items: center; justifyContent: center; }
+          .hero-3d-cube { width: 120px; height: 120px; position: relative; transform-style: preserve-3d; animation: rotate3d 10s infinite linear; }
+          @keyframes rotate3d { from { transform: rotateX(0deg) rotateY(0deg); } to { transform: rotateX(360deg) rotateY(360deg); } }
+          .hero-3d-face { position: absolute; width: 120px; height: 120px; border: 2px solid #c0fe04; background: rgba(192,254,4,0.05); display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #c0fe04; }
+          .hero-3d-face:nth-child(1) { transform: translateZ(60px); }
+          .hero-3d-face:nth-child(2) { transform: rotateY(180deg) translateZ(60px); }
+          .hero-3d-face:nth-child(3) { transform: rotateY(90deg) translateZ(60px); }
+          .hero-3d-face:nth-child(4) { transform: rotateY(-90deg) translateZ(60px); }
+          .hero-3d-face:nth-child(5) { transform: rotateX(90deg) translateZ(60px); }
+          .hero-3d-face:nth-child(6) { transform: rotateX(-90deg) translateZ(60px); }
           .marquee { border-top: 1px solid #222; border-bottom: 1px solid #222; padding: 20px 0; overflow: hidden; white-space: nowrap; }
           .marquee-content { display: inline-flex; animation: marquee 30s linear infinite; }
           .marquee-item { font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; color: #555; text-transform: uppercase; letter-spacing: 0.1em; padding: 0 40px; display: inline-flex; align-items: center; gap: 40px; }
@@ -209,25 +219,17 @@ export default function Home() {
               </div>
             </div>
             <div className="hero-right" style={{ position: 'relative', minHeight: '400px' }}>
-              <div style={{ position: 'absolute', inset: 0, borderRadius: '1rem', overflow: 'hidden', border: '1px solid #222' }} role="img" aria-label="3D visualization of permit intelligence">
-              <SplineScene
-                scene="https://prod.spline.design/6Wq1Q7YGyC-iG9DX/scene.splinecode"
-                className="w-full h-full"
-                fallback={
-                  <div style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    justifyContent: 'center', 
-                    height: '100%',
-                    background: 'linear-gradient(135deg, #0a0a0a 0%, #111 100%)'
-                  }}>
-                    <div style={{ textAlign: 'center', color: '#888' }}>
-                      <div style={{ fontSize: '3rem', marginBottom: '16px' }} aria-hidden="true">🤖</div>
-                      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.75rem' }}>3D Preview</div>
-                    </div>
+              <div className="hero-3d" role="img" aria-label="3D visualization of permit intelligence">
+                <div className="hero-3d-inner">
+                  <div className="hero-3d-cube">
+                    <div className="hero-3d-face">AI</div>
+                    <div className="hero-3d-face">PERMIT</div>
+                    <div className="hero-3d-face">FAST</div>
+                    <div className="hero-3d-face">EASY</div>
+                    <div className="hero-3d-face">SMART</div>
+                    <div className="hero-3d-face">2026</div>
                   </div>
-                }
-              />
+                </div>
               </div>
             </div>
             <WaveDivider color="#0a0a0a" height={60} />

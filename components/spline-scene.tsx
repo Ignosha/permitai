@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Spline from '@splinetool/react-spline';
 import { cn } from '@/lib/utils';
 
@@ -13,9 +13,15 @@ interface SplineSceneProps {
 export default function SplineScene({ scene, className, fallback }: SplineSceneProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    setLoading(true);
+    setError(false);
+  }, [scene]);
 
   return (
-    <div className={cn('relative w-full h-full', className)}>
+    <div ref={containerRef} className={cn('w-full h-full relative', className)}>
       {loading && !error && (
         <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #111 100%)' }}>
           {fallback || (
