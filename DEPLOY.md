@@ -96,3 +96,4 @@ STRIPE_WEBHOOK_SECRET=whsec_...
 - **Supabase**: Table Editor to see users, projects, subscriptions
 - **Stripe**: Dashboard → Payments to see transactions
 - **Uptime**: Use UptimeRobot (free) to ping your site every 5 min
+# trigger redeploy
