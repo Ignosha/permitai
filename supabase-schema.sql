@@ -5,6 +5,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE IF NOT EXISTS public.profiles (
   id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
   email TEXT,
+  role TEXT DEFAULT 'user' CHECK (role IN ('user', 'admin')),
   subscription_plan TEXT DEFAULT 'diy' CHECK (subscription_plan IN ('diy', 'solo', 'team', 'pro')),
   subscription_status TEXT DEFAULT 'active' CHECK (subscription_status IN ('active', 'past_due', 'canceled')),
   stripe_customer_id TEXT UNIQUE,
@@ -112,7 +113,55 @@ CREATE POLICY "Users can insert own documents" ON public.documents
     )
   );
 
--- Auto-update updated_at timestamp
+-- Audit log table for security events
+CREATE TABLE IF NOT EXISTS public.audit_logs (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  action TEXT NOT NULL,
+  resource_type TEXT,
+  resource_id UUID,
+  ip_address TEXT,
+  user_agent TEXT,
+  metadata JSONB,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc', NOW()) NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_audit_logs_user_id ON public.audit_logs(user_id);
+CREATE INDEX IF NOT EXISTS idx_audit_logs_action ON public.audit_logs(action);
+CREATE INDEX IF NOT EXISTS idx_audit_logs_created_at ON public.audit_logs(created_at);
+
+ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Admins can view all audit logs" ON public.audit_logs
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM public.profiles
+      WHERE profiles.id = auth.uid()
+      AND profiles.role = 'admin'
+    )
+  );
+
+CREATE POLICY "System can insert audit logs" ON public.audit_logs
+  FOR INSERT WITH CHECK (true);
+
+-- Admin policies
+CREATE POLICY "Admins can view all profiles" ON public.profiles
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM public.profiles
+      WHERE profiles.id = auth.uid()
+      AND profiles.role = 'admin'
+    )
+  );
+
+CREATE POLICY "Admins can update all profiles" ON public.profiles
+  FOR UPDATE USING (
+    EXISTS (
+      SELECT 1 FROM public.profiles
+      WHERE profiles.id = auth.uid()
+      AND profiles.role = 'admin'
+    )
+  );
 CREATE OR REPLACE FUNCTION public.handle_updated_at()
 RETURNS TRIGGER AS $$
 BEGIN

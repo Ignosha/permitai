@@ -74,6 +74,8 @@ export default function PricingPage() {
   const [authLoading, setAuthLoading] = useState(false);
   const [authError, setAuthError] = useState('');
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const [passwordStrength, setPasswordStrength] = useState<{ valid: boolean; score: number; feedback: string[] } | null>(null);
+  const [passwordLeaked, setPasswordLeaked] = useState(false);
 
   async function handleCheckout(planId: string) {
     if (planId === 'pro') {
@@ -110,6 +112,23 @@ export default function PricingPage() {
     setAuthLoading(true);
     setAuthError('');
 
+    if (authMode === 'signup') {
+      const strength = validatePasswordStrength(authPassword);
+      setPasswordStrength(strength);
+      if (!strength.valid) {
+        setAuthError('Password does not meet requirements: ' + strength.feedback.join(', '));
+        setAuthLoading(false);
+        return;
+      }
+      const leaked = await checkPasswordLeak(authPassword);
+      setPasswordLeaked(leaked);
+      if (leaked) {
+        setAuthError('This password has been exposed in a data breach. Please choose a different password.');
+        setAuthLoading(false);
+        return;
+      }
+    }
+
     try {
       const endpoint = authMode === 'signup' ? '/api/auth/signup' : '/api/auth/login';
       const response = await fetch(endpoint, {
@@ -129,12 +148,64 @@ export default function PricingPage() {
           setAuthMode(null);
           setAuthEmail('');
           setAuthPassword('');
+          setPasswordStrength(null);
+          setPasswordLeaked(false);
         }
       }
     } catch (error) {
       setAuthError('Something went wrong. Please try again.');
     } finally {
       setAuthLoading(false);
+    }
+  }
+
+  function validatePasswordStrength(password: string): { valid: boolean; score: number; feedback: string[] } {
+    const feedback: string[] = [];
+    let score = 0;
+
+    if (password.length >= 8) score += 1;
+    else feedback.push('At least 8 characters');
+
+    if (password.length >= 12) score += 1;
+
+    if (/[a-z]/.test(password)) score += 1;
+    else feedback.push('Lowercase letter');
+
+    if (/[A-Z]/.test(password)) score += 1;
+    else feedback.push('Uppercase letter');
+
+    if (/[0-9]/.test(password)) score += 1;
+    else feedback.push('Number');
+
+    if (/[^a-zA-Z0-9]/.test(password)) score += 1;
+    else feedback.push('Special character');
+
+    return {
+      valid: score >= 4,
+      score: Math.min(score, 5),
+      feedback
+    };
+  }
+
+  async function checkPasswordLeak(password: string): Promise<boolean> {
+    try {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(password);
+      const hashBuffer = await crypto.subtle.digest('SHA-1', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+      const prefix = hashHex.substring(0, 5);
+      const suffix = hashHex.substring(5);
+
+      const response = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);
+      const text = await response.text();
+      const lines = text.split('\n');
+      return lines.some(line => {
+        const [hash, count] = line.split(':');
+        return hash === suffix && parseInt(count) > 0;
+      });
+    } catch {
+      return false;
     }
   }
 
@@ -276,9 +347,15 @@ export default function PricingPage() {
                   id="auth-password"
                   type="password"
                   value={authPassword}
-                  onChange={(e) => setAuthPassword(e.target.value)}
+                  onChange={(e) => {
+                    setAuthPassword(e.target.value);
+                    if (authMode === 'signup' && e.target.value) {
+                      const strength = validatePasswordStrength(e.target.value);
+                      setPasswordStrength(strength);
+                    }
+                  }}
                   required
-                  minLength={6}
+                  minLength={8}
                   autoComplete={authMode === 'signup' ? 'new-password' : 'current-password'}
                   style={{
                     width: '100%',
@@ -290,6 +367,44 @@ export default function PricingPage() {
                     fontFamily: "'Inter', sans-serif"
                   }}
                 />
+                {authMode === 'signup' && passwordStrength && (
+                  <div style={{ marginTop: '12px' }}>
+                    <div style={{ display: 'flex', gap: '4px', marginBottom: '8px' }}>
+                      {[1, 2, 3, 4, 5].map((level) => (
+                        <div
+                          key={level}
+                          style={{
+                            flex: 1,
+                            height: '4px',
+                            background: level <= passwordStrength.score ? '#c0fe04' : '#222',
+                            borderRadius: '2px',
+                            transition: 'background 0.2s'
+                          }}
+                        />
+                      ))}
+                    </div>
+                    {passwordStrength.feedback.length > 0 && (
+                      <div style={{ fontSize: '0.75rem', color: '#888', fontFamily: "'JetBrains Mono', monospace" }}>
+                        {passwordStrength.feedback.map((item, i) => (
+                          <div key={i}>• {item}</div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+                {passwordLeaked && (
+                  <div style={{
+                    marginTop: '8px',
+                    padding: '8px 12px',
+                    background: 'rgba(255,68,68,0.1)',
+                    border: '1px solid #ff4444',
+                    color: '#ff4444',
+                    fontSize: '0.75rem',
+                    fontFamily: "'JetBrains Mono', monospace"
+                  }}>
+                    ⚠️ This password has been exposed in a data breach. Please choose a different password.
+                  </div>
+                )}
               </div>
 
               {authError && (

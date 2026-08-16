@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getSession } from './lib/supabase';
+import { securityHeaders } from './lib/security';
 
 export async function middleware(request: NextRequest) {
   const session = await getSession();
@@ -14,7 +14,8 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/', request.url));
   }
 
-  return NextResponse.next();
+  const response = securityHeaders(request);
+  return response;
 }
 
 export const config = {

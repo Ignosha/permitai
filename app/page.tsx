@@ -319,8 +319,8 @@ export default function Home() {
                 <a href="#">About</a>
                 <a href="#">Contact</a>
                 <a href="/accessibility">Accessibility</a>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
+                <a href="/legal/privacy">Privacy Policy</a>
+                <a href="/legal/terms">Terms of Service</a>
               </div>
               <div className="footer-column">
                 <h4>Connect</h4>

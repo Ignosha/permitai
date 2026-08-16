@@ -1,6 +1,7 @@
 import Stripe from 'stripe';
 import { getSession } from '../../../lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
+import { logAuditEvent } from '../../../lib/audit';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-06-20',
@@ -29,8 +30,15 @@ export async function POST(request: NextRequest) {
   try {
     const session = await getSession();
     const { plan } = await request.json();
+    const ipAddress = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
 
     if (!plan || !PLANS[plan]) {
+      await logAuditEvent({
+        userId: session?.user?.id,
+        action: 'checkout_failed',
+        ipAddress,
+        metadata: { reason: 'invalid_plan', plan }
+      });
       return NextResponse.json({ error: 'Invalid plan selected' }, { status: 400 });
     }
 
@@ -53,6 +61,14 @@ export async function POST(request: NextRequest) {
         plan: plan,
         userId: session?.user?.id || 'guest',
       },
+    });
+
+    await logAuditEvent({
+      userId: session?.user?.id,
+      action: 'checkout_initiated',
+      ipAddress,
+      resourceType: 'subscription',
+      metadata: { plan, priceId: selectedPlan.priceId }
     });
 
     return NextResponse.json({ url: checkoutSession.url });
