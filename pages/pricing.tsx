@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { getSession } from '@/lib/supabase';
 import styles from './pricing.module.css';
 
 const PLANS = [
@@ -68,6 +69,22 @@ const PLANS = [
 
 export default function PricingPage() {
   const [loading, setLoading] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+
+  useEffect(() => {
+    async function checkAuth() {
+      try {
+        const session = await getSession();
+        setIsAuthenticated(!!session);
+      } catch {
+        setIsAuthenticated(false);
+      } finally {
+        setCheckingAuth(false);
+      }
+    }
+    checkAuth();
+  }, []);
 
   async function handleCheckout(planId: string) {
     if (planId === 'pro') {
@@ -101,6 +118,47 @@ export default function PricingPage() {
 
   function openSignup() {
     window.location.href = '/signup';
+  }
+
+  if (checkingAuth) {
+    return (
+      <div style={{ minHeight: '100vh', background: '#0a0a0a', color: '#fafafa', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: '40px', height: '40px', border: '2px solid #222', borderTopColor: '#C0FE04', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div style={{ minHeight: '100vh', background: '#0a0a0a', color: '#fafafa' }}>
+        <style>{`
+          @keyframes spin { to { transform: rotate(360deg); } }
+          .gate-container { max-width: 600px; margin: 0 auto; padding: 120px 40px 80px; text-align: center; }
+          .gate-icon { font-size: 4rem; margin-bottom: 24px; }
+          .gate-title { font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; letter-spacing: -0.02em; margin-bottom: 16px; }
+          .gate-subtitle { color: #888; font-size: 1rem; line-height: 1.7; margin-bottom: 40px; }
+          .gate-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+          .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 32px; font-size: 0.875rem; font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; text-decoration: none; border: none; cursor: pointer; transition: all 0.2s; }
+          .btn-primary { background: #c0fe04; color: #000; }
+          .btn-primary:hover { background: #a8d904; }
+          .btn-secondary { background: transparent; color: #fafafa; border: 1px solid #222; }
+          .btn-secondary:hover { border-color: #fafafa; }
+        `}</style>
+
+        <div className="gate-container">
+          <div className="gate-icon">🔒</div>
+          <h1 className="gate-title">Pricing Plans</h1>
+          <p className="gate-subtitle">
+            Sign up or sign in to view pricing plans and start your free trial. 
+            No credit card required.
+          </p>
+          <div className="gate-actions">
+            <a href="/signup" className="btn btn-primary">Create Free Account</a>
+            <a href="/login" className="btn btn-secondary">Sign In</a>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (

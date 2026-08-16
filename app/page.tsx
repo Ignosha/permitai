@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import SplineScene from '@/components/spline-scene';
 import WaveDivider from '@/components/wave-divider';
 import AnalyticsTracker from '@/components/analytics-tracker';
 import SEOHead from '@/components/seo-head';
@@ -10,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
+  const [showPricingGate, setShowPricingGate] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 500);
@@ -109,17 +111,6 @@ export default function Home() {
           .hero-description { font-size: 1rem; color: #888; max-width: 400px; line-height: 1.7; margin-bottom: 40px; }
           .hero-cta-group { display: flex; gap: 16px; flex-wrap: wrap; }
           .hero-right { grid-column: 7 / 13; display: flex; flex-direction: column; justify-content: flex-end; padding-bottom: 40px; }
-          .hero-3d { position: relative; min-height: 400px; border-radius: 1rem; overflow: hidden; border: 1px solid #222; background: linear-gradient(135deg, #0a0a0a 0%, #111 100%); }
-          .hero-3d-inner { position: absolute; inset: 0; display: flex; align-items: center; justifyContent: center; }
-          .hero-3d-cube { width: 120px; height: 120px; position: relative; transform-style: preserve-3d; animation: rotate3d 10s infinite linear; }
-          @keyframes rotate3d { from { transform: rotateX(0deg) rotateY(0deg); } to { transform: rotateX(360deg) rotateY(360deg); } }
-          .hero-3d-face { position: absolute; width: 120px; height: 120px; border: 2px solid #c0fe04; background: rgba(192,254,4,0.05); display: flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #c0fe04; }
-          .hero-3d-face:nth-child(1) { transform: translateZ(60px); }
-          .hero-3d-face:nth-child(2) { transform: rotateY(180deg) translateZ(60px); }
-          .hero-3d-face:nth-child(3) { transform: rotateY(90deg) translateZ(60px); }
-          .hero-3d-face:nth-child(4) { transform: rotateY(-90deg) translateZ(60px); }
-          .hero-3d-face:nth-child(5) { transform: rotateX(90deg) translateZ(60px); }
-          .hero-3d-face:nth-child(6) { transform: rotateX(-90deg) translateZ(60px); }
           .marquee { border-top: 1px solid #222; border-bottom: 1px solid #222; padding: 20px 0; overflow: hidden; white-space: nowrap; }
           .marquee-content { display: inline-flex; animation: marquee 30s linear infinite; }
           .marquee-item { font-family: 'JetBrains Mono', monospace; font-size: 0.875rem; color: #555; text-transform: uppercase; letter-spacing: 0.1em; padding: 0 40px; display: inline-flex; align-items: center; gap: 40px; }
@@ -219,17 +210,25 @@ export default function Home() {
               </div>
             </div>
             <div className="hero-right" style={{ position: 'relative', minHeight: '400px' }}>
-              <div className="hero-3d" role="img" aria-label="3D visualization of permit intelligence">
-                <div className="hero-3d-inner">
-                  <div className="hero-3d-cube">
-                    <div className="hero-3d-face">AI</div>
-                    <div className="hero-3d-face">PERMIT</div>
-                    <div className="hero-3d-face">FAST</div>
-                    <div className="hero-3d-face">EASY</div>
-                    <div className="hero-3d-face">SMART</div>
-                    <div className="hero-3d-face">2026</div>
-                  </div>
-                </div>
+              <div style={{ position: 'absolute', inset: 0, borderRadius: '1rem', overflow: 'hidden', border: '1px solid #222' }} role="img" aria-label="3D visualization of permit intelligence">
+                <SplineScene
+                  scene="https://prod.spline.design/6Wq1Q7YGyC-iG9DX/scene.splinecode"
+                  className="w-full h-full"
+                  fallback={
+                    <div style={{ 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center', 
+                      height: '100%',
+                      background: 'linear-gradient(135deg, #0a0a0a 0%, #111 100%)'
+                    }}>
+                      <div style={{ textAlign: 'center', color: '#888' }}>
+                        <div style={{ fontSize: '3rem', marginBottom: '16px' }} aria-hidden="true">🤖</div>
+                        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.75rem' }}>3D Preview</div>
+                      </div>
+                    </div>
+                  }
+                />
               </div>
             </div>
             <WaveDivider color="#0a0a0a" height={60} />
@@ -378,9 +377,9 @@ export default function Home() {
               <span className="accent">on permits.</span>
             </h2>
             <p className="cta-subtitle">Join 2,000+ contractors and homeowners who cut their permit time by 80%. Start your free trial today.</p>
-            <a href="/signup" className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '16px 40px' }} aria-label="Start your free trial">
-              Start Your Free Trial
-            </a>
+            <button onClick={() => setShowPricingGate(true)} className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '16px 40px' }} aria-label="View pricing plans">
+              View Pricing Plans
+            </button>
           </section>
 
           {/* Footer */}
@@ -428,6 +427,58 @@ export default function Home() {
         </main>
 
         <canvas id="bg-canvas" aria-hidden="true" />
+
+        {/* Pricing Gate Modal */}
+        {showPricingGate && (
+          <div style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.85)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+            padding: 20,
+            backdropFilter: 'blur(8px)'
+          }} onClick={() => setShowPricingGate(false)} role="presentation">
+            <div style={{
+              background: '#0a0a0a',
+              border: '1px solid #222',
+              padding: '48px',
+              maxWidth: '520px',
+              width: '100%',
+              maxHeight: '90vh',
+              overflowY: 'auto'
+            }} onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="gate-title">
+              <div style={{ textAlign: 'center', marginBottom: '32px' }}>
+                <div style={{ fontSize: '3rem', marginBottom: '16px' }}>🔒</div>
+                <h2 id="gate-title" style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '12px' }}>
+                  Sign up to view pricing
+                </h2>
+                <p style={{ color: '#888', fontSize: '0.9375rem', lineHeight: 1.7 }}>
+                  Create a free account to unlock pricing plans and start your 14-day trial. No credit card required.
+                </p>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <a href="/signup" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', padding: '14px 24px' }} onClick={() => setShowPricingGate(false)}>
+                  Create Free Account
+                </a>
+                <a href="/login" className="btn btn-secondary" style={{ width: '100%', justifyContent: 'center', padding: '14px 24px', border: '1px solid #222', color: '#fafafa' }} onClick={() => setShowPricingGate(false)}>
+                  Sign In
+                </a>
+              </div>
+
+              <p style={{ textAlign: 'center', marginTop: '24px', color: '#555', fontSize: '0.875rem' }}>
+                Already have an account?{' '}
+                <a href="/login" style={{ color: '#c0fe04', textDecoration: 'none' }} onClick={() => setShowPricingGate(false)}>
+                  Sign in
+                </a>{' '}
+                to view plans
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
