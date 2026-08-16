@@ -4,14 +4,19 @@ import { securityHeaders } from './lib/security';
 
 export async function middleware(request: NextRequest) {
   const session = await getSession();
-  const protectedPaths = ['/dashboard', '/api/chat'];
+  const protectedPaths = ['/dashboard', '/tools', '/api/chat'];
+  const apiPaths = ['/api/chat', '/api/checkout', '/api/admin'];
 
   const isProtected = protectedPaths.some(path => 
     request.nextUrl.pathname.startsWith(path)
   );
 
-  if (isProtected && !session) {
-    return NextResponse.redirect(new URL('/', request.url));
+  const isApiProtected = apiPaths.some(path =>
+    request.nextUrl.pathname.startsWith(path)
+  );
+
+  if ((isProtected || isApiProtected) && !session) {
+    return NextResponse.redirect(new URL('/login', request.url));
   }
 
   const response = securityHeaders(request);
@@ -19,5 +24,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/api/chat/:path*'],
+  matcher: ['/dashboard/:path*', '/tools/:path*', '/api/:path*'],
 };
