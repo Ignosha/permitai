@@ -1,11 +1,12 @@
 'use client';
 
 import { useEffect } from 'react';
-import { usePathname } from 'next/navigation';
-import { initAnalytics, useAnalytics } from '@/lib/analytics';
+import { useRouter } from 'next/router';
+import { initAnalytics } from '@/lib/analytics';
 
 export default function AnalyticsTracker() {
-  const pathname = usePathname();
+  const router = useRouter();
+  const pathname = router.pathname;
   const { track } = useAnalytics();
   
   useEffect(() => {
@@ -64,4 +65,14 @@ export default function AnalyticsTracker() {
   }, [pathname, track]);
   
   return null;
+}
+
+function useAnalytics() {
+  return {
+    track: (event: string, properties?: Record<string, any>) => {
+      if (typeof window !== 'undefined' && window.permitaiAnalytics) {
+        window.permitaiAnalytics.track(event, properties);
+      }
+    },
+  };
 }

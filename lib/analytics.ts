@@ -71,7 +71,6 @@ export function initAnalytics() {
 }
 
 export function useAnalytics() {
-  const pathname = usePathname();
   const initialized = useRef(false);
   
   useEffect(() => {
@@ -81,18 +80,16 @@ export function useAnalytics() {
     }
   }, []);
   
-  useEffect(() => {
-    if (window.permitaiAnalytics && pathname) {
-      window.permitaiAnalytics.page(pathname);
-    }
-  }, [pathname]);
-  
   return {
     track: (event: string, properties?: Record<string, any>) => {
-      window.permitaiAnalytics?.track(event, properties);
+      if (typeof window !== 'undefined' && window.permitaiAnalytics) {
+        window.permitaiAnalytics.track(event, properties);
+      }
     },
     identify: (userId: string, traits?: Record<string, any>) => {
-      window.permitaiAnalytics?.identify(userId, traits);
+      if (typeof window !== 'undefined' && window.permitaiAnalytics) {
+        window.permitaiAnalytics.identify(userId, traits);
+      }
     },
   };
 }
