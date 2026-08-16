@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Spline from '@splinetool/react-spline';
 import { cn } from '@/lib/utils';
 
@@ -12,24 +12,41 @@ interface SplineSceneProps {
 
 export default function SplineScene({ scene, className, fallback }: SplineSceneProps) {
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   return (
     <div className={cn('relative w-full h-full', className)}>
-      {loading && (
-        <div className="absolute inset-0 flex items-center justify-center">
+      {loading && !error && (
+        <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #111 100%)' }}>
           {fallback || (
-            <div className="w-8 h-8 border-2 border-[#222] border-t-[#c0fe04] rounded-full animate-spin" />
+            <div style={{ textAlign: 'center', color: '#888' }}>
+              <div style={{ fontSize: '3rem', marginBottom: '16px' }}>🤖</div>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.75rem' }}>Loading 3D...</div>
+            </div>
           )}
         </div>
       )}
-      <Spline
-        scene={scene}
-        onLoad={() => setLoading(false)}
-        onError={(error: any) => {
-          console.error('Spline load error:', error);
-          setLoading(false);
-        }}
-      />
+      {error && (
+        <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #0a0a0a 0%, #111 100%)' }}>
+          {fallback || (
+            <div style={{ textAlign: 'center', color: '#888' }}>
+              <div style={{ fontSize: '3rem', marginBottom: '16px' }}>⚠️</div>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '0.75rem' }}>3D preview unavailable</div>
+            </div>
+          )}
+        </div>
+      )}
+      <div className={cn('w-full h-full', loading || error ? 'hidden' : '')}>
+        <Spline
+          scene={scene}
+          onLoad={() => setLoading(false)}
+          onError={(err: any) => {
+            console.error('Spline error:', err);
+            setError(true);
+            setLoading(false);
+          }}
+        />
+      </div>
     </div>
   );
 }

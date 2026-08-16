@@ -1,4 +1,6 @@
-import Head from 'next/head';
+'use client';
+
+import { useEffect } from 'react';
 
 interface SEOHeadProps {
   title?: string;
@@ -23,78 +25,114 @@ export default function SEOHead({
   keywords = [],
   noIndex = false,
 }: SEOHeadProps) {
-  const fullTitle = title === DEFAULT_TITLE ? title : `${title} | PermitAI`;
-  const fullUrl = url ? `https://permitai.co${url}` : 'https://permitai.co';
-  const keywordsStr = keywords.length > 0 ? keywords.join(', ') : 'permits, AI, building permits, permit applications, construction, contractor, homeowner';
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
 
-  return (
-    <Head>
-      <title key="title">{fullTitle}</title>
-      <meta name="description" content={description} key="description" />
-      <meta name="keywords" content={keywordsStr} key="keywords" />
-      <link rel="canonical" href={fullUrl} key="canonical" />
-      
-      {noIndex && <meta name="robots" content="noindex, nofollow" />}
-      
-      {/* Open Graph */}
-      <meta property="og:type" content={type} key="og:type" />
-      <meta property="og:url" content={fullUrl} key="og:url" />
-      <meta property="og:title" content={fullTitle} key="og:title" />
-      <meta property="og:description" content={description} key="og:description" />
-      <meta property="og:image" content={image} key="og:image" />
-      <meta property="og:image:width" content="1200" />
-      <meta property="og:image:height" content="630" />
-      <meta property="og:site_name" content="PermitAI" />
-      <meta property="og:locale" content="en_US" />
-      
-      {/* Twitter */}
-      <meta name="twitter:card" content="summary_large_image" key="twitter:card" />
-      <meta name="twitter:url" content={fullUrl} key="twitter:url" />
-      <meta name="twitter:title" content={fullTitle} key="twitter:title" />
-      <meta name="twitter:description" content={description} key="twitter:description" />
-      <meta name="twitter:image" content={image} key="twitter:image" />
-      
-      {/* Additional SEO */}
-      <meta name="author" content="PermitAI" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <link rel="icon" href="/favicon.ico" />
-      <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-      
-      {/* Structured Data */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'SoftwareApplication',
-            name: 'PermitAI',
-            applicationCategory: 'BusinessApplication',
-            operatingSystem: 'Web',
-            description: description,
-            offers: [
-              {
-                '@type': 'Offer',
-                name: 'DIY Homeowner',
-                price: '9.99',
-                priceCurrency: 'USD',
-                billingIncrement: 'P1M',
-              },
-              {
-                '@type': 'Offer',
-                name: 'Solo Contractor',
-                price: '49',
-                priceCurrency: 'USD',
-                billingIncrement: 'P1M',
-              },
-            ],
-            aggregateRating: {
-              '@type': 'AggregateRating',
-              ratingValue: '4.8',
-              ratingCount: '240',
-            },
-          }),
-        }}
-      />
-    </Head>
-  );
+    const fullTitle = title === DEFAULT_TITLE ? title : `${title} | PermitAI`;
+    const fullUrl = url ? `https://permitai.co${url}` : 'https://permitai.co';
+    const keywordsStr = keywords.length > 0 ? keywords.join(', ') : 'permits, AI, building permits, permit applications, construction, contractor, homeowner';
+
+    // Update title
+    document.title = fullTitle;
+
+    // Update or create meta tags
+    const updateMeta = (name: string, content: string, isProperty = false) => {
+      let meta = document.querySelector(`meta[${isProperty ? 'property' : 'name'}="${name}"]`);
+      if (!meta) {
+        meta = document.createElement('meta');
+        meta.setAttribute(isProperty ? 'property' : 'name', name);
+        document.head.appendChild(meta);
+      }
+      meta.setAttribute('content', content);
+    };
+
+    // Basic SEO
+    updateMeta('description', description);
+    updateMeta('keywords', keywordsStr);
+    updateMeta('author', 'PermitAI');
+    updateMeta('viewport', 'width=device-width, initial-scale=1');
+    
+    if (noIndex) {
+      updateMeta('robots', 'noindex, nofollow');
+    } else {
+      const robotsMeta = document.querySelector('meta[name="robots"]');
+      if (robotsMeta) robotsMeta.remove();
+    }
+
+    // Canonical
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', fullUrl);
+
+    // Open Graph
+    updateMeta('og:type', type, true);
+    updateMeta('og:url', fullUrl, true);
+    updateMeta('og:title', fullTitle, true);
+    updateMeta('og:description', description, true);
+    updateMeta('og:image', image, true);
+    updateMeta('og:image:width', '1200', true);
+    updateMeta('og:image:height', '630', true);
+    updateMeta('og:site_name', 'PermitAI', true);
+    updateMeta('og:locale', 'en_US', true);
+
+    // Twitter
+    updateMeta('twitter:card', 'summary_large_image');
+    updateMeta('twitter:url', fullUrl);
+    updateMeta('twitter:title', fullTitle);
+    updateMeta('twitter:description', description);
+    updateMeta('twitter:image', image);
+
+    // Favicon
+    if (!document.querySelector('link[rel="icon"]')) {
+      const favicon = document.createElement('link');
+      favicon.setAttribute('rel', 'icon');
+      favicon.setAttribute('href', '/favicon.ico');
+      document.head.appendChild(favicon);
+    }
+
+    // Structured Data
+    const existingScript = document.querySelector('script[type="application/ld+json"]');
+    if (existingScript) {
+      existingScript.remove();
+    }
+
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'PermitAI',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Web',
+      description: description,
+      offers: [
+        {
+          '@type': 'Offer',
+          name: 'DIY Homeowner',
+          price: '9.99',
+          priceCurrency: 'USD',
+          billingIncrement: 'P1M',
+        },
+        {
+          '@type': 'Offer',
+          name: 'Solo Contractor',
+          price: '49',
+          priceCurrency: 'USD',
+          billingIncrement: 'P1M',
+        },
+      ],
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: '4.8',
+        ratingCount: '240',
+      },
+    });
+    document.head.appendChild(script);
+  }, [title, description, image, url, type, keywords.join(','), noIndex]);
+
+  return null;
 }
