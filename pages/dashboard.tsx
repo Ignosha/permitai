@@ -46,7 +46,7 @@ export default function Dashboard() {
     if (error) {
       console.error('Error loading projects:', error);
     } else {
-      setProjects(data || []);
+      setProjects((data as Project[]) || []);
     }
     setLoading(false);
   }
@@ -71,7 +71,7 @@ export default function Dashboard() {
     if (error) {
       console.error('Error creating project:', error);
       alert('Failed to create project');
-    } else {
+    } else if (data) {
       setProjects([data, ...projects]);
       setShowNewProject(false);
       (e.target as HTMLFormElement).reset();
@@ -283,30 +283,33 @@ export default function Dashboard() {
                 </div>
               ) : (
                 <div>
-                  {projects.slice(0, 5).map((project: Project) => (
-                    <div 
-                      key={project.id} 
-                      className={`project-card ${selectedProject?.id === project.id ? 'selected' : ''}`}
-                      onClick={() => { setSelectedProject(project); setActiveTab('projects'); }}
-                    >
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                        <div style={{ flex: 1 }}>
-                          <div className="project-name">{project.name}</div>
-                          <div className="project-meta">
-                            <span>{project.project_type}</span>
-                            <span>{project.zip_code}</span>
-                            <span>{new Date(project.created_at).toLocaleDateString()}</span>
-                          </div>
-                          <div className="project-status" style={{ 
-                            borderColor: project.status === 'active' ? '#C0FE04' : '#222',
-                            color: project.status === 'active' ? '#C0FE04' : '#888'
-                          }}>
-                            {project.status}
+                  {(projects.slice(0, 5) as Project[]).map((project) => {
+                    const p = project as Project;
+                    return (
+                      <div 
+                        key={p.id} 
+                        className="project-card"
+                        onClick={() => { setSelectedProject(p); setActiveTab('projects'); }}
+                      >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                          <div style={{ flex: 1 }}>
+                            <div className="project-name">{p.name}</div>
+                            <div className="project-meta">
+                              <span>{p.project_type}</span>
+                              <span>{p.zip_code}</span>
+                              <span>{new Date(p.created_at).toLocaleDateString()}</span>
+                            </div>
+                            <div className="project-status" style={{ 
+                              borderColor: p.status === 'active' ? '#C0FE04' : '#222',
+                              color: p.status === 'active' ? '#C0FE04' : '#888'
+                            }}>
+                              {p.status}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -377,34 +380,37 @@ export default function Dashboard() {
                         Create Your First Project
                       </button>
                     </div>
-                  ) : (
-                    <div>
-                      {projects.map((project: Project) => (
-                        <div 
-                          key={project.id} 
-                          className={`project-card ${selectedProject?.id === project.id ? 'selected' : ''}`}
-                          onClick={() => setSelectedProject(project)}
-                        >
-                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                            <div style={{ flex: 1 }}>
-                              <div className="project-name">{project.name}</div>
-                              <div className="project-meta">
-                                <span>{project.project_type}</span>
-                                <span>{project.zip_code}</span>
-                                <span>{new Date(project.created_at).toLocaleDateString()}</span>
-                              </div>
-                              <div className="project-status" style={{ 
-                                borderColor: project.status === 'active' ? '#C0FE04' : '#222',
-                                color: project.status === 'active' ? '#C0FE04' : '#888'
-                              }}>
-                                {project.status}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                   ) : (
+                     <div>
+                       {(projects as Project[]).map((project) => {
+                         const p = project as Project;
+                         return (
+                           <div 
+                             key={p.id} 
+                             className="project-card"
+                             onClick={() => setSelectedProject(p)}
+                           >
+                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                               <div style={{ flex: 1 }}>
+                                 <div className="project-name">{p.name}</div>
+                                 <div className="project-meta">
+                                   <span>{p.project_type}</span>
+                                   <span>{p.zip_code}</span>
+                                   <span>{new Date(p.created_at).toLocaleDateString()}</span>
+                                 </div>
+                                 <div className="project-status" style={{ 
+                                   borderColor: p.status === 'active' ? '#C0FE04' : '#222',
+                                   color: p.status === 'active' ? '#C0FE04' : '#888'
+                                 }}>
+                                   {p.status}
+                                 </div>
+                               </div>
+                             </div>
+                           </div>
+                         );
+                       })}
+                     </div>
+                   )}
                 </div>
               )}
             </div>
