@@ -186,6 +186,7 @@ export default function PricingPage() {
                 }}
                 onClick={() => openAuth(plan.id)}
                 disabled={loading === plan.id}
+                aria-label={`${plan.cta} for ${plan.name} plan`}
               >
                 {loading === plan.id ? 'Loading...' : plan.cta}
               </button>
@@ -210,15 +211,15 @@ export default function PricingPage() {
           justifyContent: 'center',
           zIndex: 100,
           padding: 20
-        }} onClick={() => setAuthMode(null)}>
+        }} onClick={() => setAuthMode(null)} role="presentation">
           <div style={{
             background: '#0a0a0a',
             border: '1px solid #222',
             padding: '40px',
             maxWidth: '400px',
             width: '100%'
-          }} onClick={(e) => e.stopPropagation()}>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '8px' }}>
+          }} onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-labelledby="auth-title">
+            <h2 id="auth-title" style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '8px' }}>
               {authMode === 'signup' ? 'Create account' : 'Welcome back'}
             </h2>
             <p style={{ color: '#888', marginBottom: '32px', fontSize: '0.9375rem' }}>
@@ -229,7 +230,7 @@ export default function PricingPage() {
 
             <form onSubmit={handleAuth}>
               <div style={{ marginBottom: '20px' }}>
-                <label style={{
+                <label htmlFor="auth-email" style={{
                   display: 'block',
                   fontFamily: "'JetBrains Mono', monospace",
                   fontSize: '0.75rem',
@@ -241,10 +242,12 @@ export default function PricingPage() {
                   Email
                 </label>
                 <input
+                  id="auth-email"
                   type="email"
                   value={authEmail}
                   onChange={(e) => setAuthEmail(e.target.value)}
                   required
+                  autoComplete="email"
                   style={{
                     width: '100%',
                     padding: '12px 16px',
@@ -258,7 +261,7 @@ export default function PricingPage() {
               </div>
 
               <div style={{ marginBottom: '24px' }}>
-                <label style={{
+                <label htmlFor="auth-password" style={{
                   display: 'block',
                   fontFamily: "'JetBrains Mono', monospace",
                   fontSize: '0.75rem',
@@ -270,11 +273,13 @@ export default function PricingPage() {
                   Password
                 </label>
                 <input
+                  id="auth-password"
                   type="password"
                   value={authPassword}
                   onChange={(e) => setAuthPassword(e.target.value)}
                   required
                   minLength={6}
+                  autoComplete={authMode === 'signup' ? 'new-password' : 'current-password'}
                   style={{
                     width: '100%',
                     padding: '12px 16px',
@@ -295,7 +300,7 @@ export default function PricingPage() {
                   color: '#ff4444',
                   fontSize: '0.875rem',
                   marginBottom: '20px'
-                }}>
+                }} role="alert" aria-live="assertive">
                   {authError}
                 </div>
               )}

@@ -124,9 +124,25 @@ export default function Home() {
       <div id="loading-bar" style={{ width: '100%' }} />
       <canvas id="bg-canvas" />
 
-      <header className="header">
+      <a href="#main-content" style={{
+        position: 'absolute',
+        top: '-40px',
+        left: '0',
+        background: '#c0fe04',
+        color: '#000',
+        padding: '8px 16px',
+        zIndex: 100,
+        textDecoration: 'none',
+        fontWeight: 600,
+        fontSize: '0.875rem',
+        transition: 'top 0.2s'
+      }} onFocus={(e) => e.currentTarget.style.top = '0'} onBlur={(e) => e.currentTarget.style.top = '-40px'}>
+        Skip to main content
+      </a>
+
+      <header className="header" role="banner">
         <div className="logo">PermitAI</div>
-        <nav className="nav-links">
+        <nav className="nav-links" role="navigation" aria-label="Main navigation">
           <a href="#features">Capabilities</a>
           <a href="#pricing">Pricing</a>
           <a href="#proof">Proof</a>
@@ -136,7 +152,8 @@ export default function Home() {
         </nav>
       </header>
 
-      <main>
+      <main id="main-content">
+        <div id="top" aria-hidden="true" style={{ position: 'absolute', top: 0 }}></div>
         {/* Hero */}
         <section className="hero">
           <div className="hero-left">
@@ -271,19 +288,19 @@ export default function Home() {
         </section>
 
         {/* CTA */}
-        <section id="cta" className="cta-section">
-          <h2 className="cta-title">
+        <section id="cta" className="cta-section" aria-labelledby="cta-title">
+          <h2 id="cta-title" className="cta-title">
             Stop waiting<br />
             <span className="accent">on permits.</span>
           </h2>
           <p className="cta-subtitle">Join 2,000+ contractors and homeowners who cut their permit time by 80%. Start your free trial today.</p>
-          <a href="/pricing" className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '16px 40px' }}>
+          <a href="/pricing" className="btn btn-primary" style={{ fontSize: '1.1rem', padding: '16px 40px' }} aria-label="Start your free trial">
             Start Your Free Trial
           </a>
         </section>
 
         {/* Footer */}
-        <footer>
+        <footer role="contentinfo">
           <div className="footer-grid">
             <div className="footer-brand">
               <span className="logo">PermitAI</span>
@@ -301,6 +318,7 @@ export default function Home() {
                 <h4>Company</h4>
                 <a href="#">About</a>
                 <a href="#">Contact</a>
+                <a href="/accessibility">Accessibility</a>
                 <a href="#">Privacy Policy</a>
                 <a href="#">Terms of Service</a>
               </div>
@@ -316,6 +334,11 @@ export default function Home() {
           <div className="footer-bottom">
             <p>&copy; 2026 PermitAI. All rights reserved.</p>
             <div className="footer-status">All systems operational</div>
+          </div>
+          <div style={{ marginTop: '40px', paddingTop: '20px', borderTop: '1px solid #222', textAlign: 'center' }}>
+            <a href="#top" style={{ color: '#888', textDecoration: 'none', fontSize: '0.875rem', fontFamily: "'JetBrains Mono', monospace" }}>
+              ↑ Back to top
+            </a>
           </div>
         </footer>
       </main>
