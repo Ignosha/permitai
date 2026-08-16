@@ -203,6 +203,9 @@ export default function Dashboard() {
             <button className="sidebar-item" onClick={() => window.location.href = '/pricing'}>
               Pricing
             </button>
+            <button className="sidebar-item" onClick={() => window.location.href = '/settings/privacy'}>
+              Privacy & Data
+            </button>
             <button className="sidebar-item" onClick={signOut}>
               Sign Out
             </button>

@@ -24,8 +24,8 @@ export async function POST(request: NextRequest) {
       case 'checkCompliance':
         result = await checkCompliance(params.projectDescription, params.zipCode);
         break;
-      case 'generateChecklist':
-        result = await generateDocumentChecklist(params.projectDescription, params.permitType);
+      case 'generateDocumentChecklist':
+        result = await generateDocumentChecklist(params.projectType || params.projectDescription, params.zipCode);
         break;
       default:
         return NextResponse.json({ error: 'Invalid action' }, { status: 400 });

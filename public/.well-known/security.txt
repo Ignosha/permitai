@@ -1,0 +1,12 @@
+# Security.txt for PermitAI
+# Contact: security@permitai.co
+# Encryption: https://permitai.co/pgp-key.asc
+# Policy: https://permitai.co/security-policy
+# Acknowledgments: https://permitai.co/hall-of-fame
+# Preferred-Languages: en
+
+Contact: mailto:security@permitai.co
+Encryption: https://permitai.co/pgp-key.asc
+Policy: https://permitai.co/security-policy
+Acknowledgments: https://permitai.co/hall-of-fame
+Preferred-Languages: en

@@ -17,6 +17,8 @@ export default function TermsPage() {
         .legal-content strong { color: #fafafa; font-weight: 600; }
         .back-link { display: inline-flex; align-items: center; gap: 8px; color: #888; text-decoration: none; font-size: 0.875rem; margin-bottom: 32px; transition: color 0.2s; }
         .back-link:hover { color: #c0fe04; }
+        .highlight-box { padding: 20px; background: #111; border-left: 3px solid #c0fe04; margin: 24px 0; }
+        .highlight-box-title { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #c0fe04; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
         @media (max-width: 640px) { .legal-container { padding: 100px 20px 60px; } }
       `}</style>
 
@@ -26,57 +28,84 @@ export default function TermsPage() {
         <div className="legal-header">
           <span className="legal-label">// Legal</span>
           <h1 className="legal-title">Terms of Service</h1>
-          <div className="legal-meta">Last updated: August 16, 2026</div>
+          <div className="legal-meta">Last updated: August 16, 2026 | Effective date: August 16, 2026</div>
         </div>
 
         <div className="legal-content">
           <p>
-            By accessing or using PermitAI, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.
+            Welcome to PermitAI. By accessing or using our services, you agree to be bound by these Terms of Service. Please read them carefully.
           </p>
 
-          <h2>Acceptance of Terms</h2>
+          <h2>1. Acceptance of Terms</h2>
           <p>
-            By creating an account or using our services, you agree to these Terms of Service and our Privacy Policy. If you are using our services on behalf of an organization, you represent that you have authority to bind that organization to these terms.
+            By creating an account or using any part of the PermitAI service, you agree to these Terms of Service and our Privacy Policy. If you do not agree, please do not use our services.
           </p>
 
-          <h2>Description of Service</h2>
+          <h2>2. Description of Service</h2>
           <p>
-            PermitAI provides AI-powered permit application assistance. We do not guarantee permit approval, and our services are not a substitute for professional legal, architectural, or engineering advice.
+            PermitAI provides AI-powered permit application assistance tools including permit finder, application drafter, compliance checker, and document checklist generator. We do not guarantee permit approval and are not affiliated with any government agency.
           </p>
 
-          <h2>User Responsibilities</h2>
-          <p>You agree to:</p>
+          <h2>3. User Accounts</h2>
+          <p>When you create an account with us, you must provide accurate and complete information. You are responsible for:</p>
           <ul>
-            <li>Provide accurate and complete information when using our services</li>
-            <li>Maintain the security of your account credentials</li>
-            <li>Notify us immediately of any unauthorized access to your account</li>
-            <li>Comply with all applicable laws and regulations</li>
-            <li>Not use our services for any illegal or unauthorized purpose</li>
+            <li>Maintaining the confidentiality of your account credentials</li>
+            <li>All activities that occur under your account</li>
+            <li>Notifying us immediately of any unauthorized use</li>
+            <li>Ensuring your use of the service complies with applicable laws</li>
           </ul>
 
-          <h2>Intellectual Property</h2>
+          <h2>4. Acceptable Use</h2>
+          <p>You agree not to:</p>
+          <ul>
+            <li>Use the service for any illegal purpose</li>
+            <li>Attempt to gain unauthorized access to our systems</li>
+            <li>Interfere with or disrupt the integrity of our service</li>
+            <li>Use the service to submit false or misleading permit applications</li>
+            <li>Reverse engineer or attempt to extract our AI models</li>
+            <li>Resell or redistribute our services without authorization</li>
+          </ul>
+
+          <h2>5. Intellectual Property</h2>
           <p>
-            All content, features, and functionality of PermitAI are owned by us and are protected by copyright, trademark, and other intellectual property laws. You may not copy, modify, distribute, or create derivative works without our express written permission.
+            All content, features, and functionality of the PermitAI service are owned by PermitAI and are protected by international copyright, trademark, and other intellectual property laws.
           </p>
 
-          <h2>Limitation of Liability</h2>
+          <h2>6. Limitation of Liability</h2>
           <p>
-            To the fullest extent permitted by law, PermitAI shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including loss of profits, data, or goodwill, arising from your use of our services.
+            PermitAI is not liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, or other intangible losses. Our total liability shall not exceed the amount you paid us in the past 12 months.
           </p>
 
-          <h2>Indemnification</h2>
+          <div className="highlight-box">
+            <div className="highlight-box-title">Important Disclaimer</div>
+            <p style={{ margin: 0, fontSize: '0.875rem' }}>
+              PermitAI provides AI-generated suggestions only. We do not guarantee the accuracy, completeness, or legality of generated content. Always review all permit applications with a qualified professional before submission.
+            </p>
+          </div>
+
+          <h2>7. Indemnification</h2>
           <p>
-            You agree to indemnify and hold harmless PermitAI and its officers, directors, employees, and agents from any claims, damages, losses, and expenses arising from your use of our services or violation of these terms.
+            You agree to indemnify and hold harmless PermitAI from any claims, damages, losses, and expenses arising from your use of the service or violation of these terms.
           </p>
 
-          <h2>Changes to Terms</h2>
+          <h2>8. Termination</h2>
           <p>
-            We may modify these terms at any time. We will notify you of significant changes by posting the new terms on our website or via email. Your continued use of our services after changes constitutes acceptance of the new terms.
+            We may terminate or suspend your account immediately, without prior notice, for any reason, including breach of these Terms. Upon termination, your right to use the service will immediately cease.
           </p>
 
-          <h2>Contact Information</h2>
+          <h2>9. Changes to Terms</h2>
           <p>
-            If you have questions about these Terms of Service, please contact us at <a href="mailto:support@permitai.co">support@permitai.co</a>.
+            We reserve the right to modify these terms at any time. We will provide notice of material changes by posting the new Terms of Service on this page and updating the "Last updated" date.
+          </p>
+
+          <h2>10. Governing Law</h2>
+          <p>
+            These Terms shall be governed by and construed in accordance with the laws of the State of Texas, United States, without regard to its conflict of law provisions.
+          </p>
+
+          <h2>11. Contact Information</h2>
+          <p>
+            If you have any questions about these Terms of Service, please contact us at <a href="mailto:support@permitai.co">support@permitai.co</a>.
           </p>
         </div>
       </div>
