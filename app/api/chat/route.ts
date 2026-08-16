@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { findPermits, draftApplication, checkCompliance, generateDocumentChecklist } from '../../../../lib/ai';
-import { getSession } from '../../../../lib/supabase';
+import { findPermits, draftApplication, checkCompliance, generateDocumentChecklist } from '../../../lib/ai';
+import { getSession } from '../../../lib/supabase';
 
 export async function POST(request: NextRequest) {
   try {

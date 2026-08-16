@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { supabase, getSession } from '../../lib/supabase';
+import { supabase, getSession } from '../lib/supabase';
 
 interface Project {
   id: string;
