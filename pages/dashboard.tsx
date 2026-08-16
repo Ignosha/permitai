@@ -283,7 +283,7 @@ export default function Dashboard() {
                 </div>
               ) : (
                 <div>
-                  {projects.slice(0, 5).map(project => (
+                  {projects.slice(0, 5).map((project: Project) => (
                     <div 
                       key={project.id} 
                       className={`project-card ${selectedProject?.id === project.id ? 'selected' : ''}`}
@@ -379,7 +379,7 @@ export default function Dashboard() {
                     </div>
                   ) : (
                     <div>
-                      {projects.map(project => (
+                      {projects.map((project: Project) => (
                         <div 
                           key={project.id} 
                           className={`project-card ${selectedProject?.id === project.id ? 'selected' : ''}`}
