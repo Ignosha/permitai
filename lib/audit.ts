@@ -1,4 +1,4 @@
-import { supabase } from '../supabase';
+import { supabase } from './supabase';
 
 export async function logAuditEvent(data: {
   userId?: string;

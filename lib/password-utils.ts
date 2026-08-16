@@ -34,7 +34,7 @@ export function validatePasswordStrength(password: string): {
   };
 }
 
-export function checkPasswordLeak(password: string): Promise<boolean> {
+export async function checkPasswordLeak(password: string): Promise<boolean> {
   const encoder = new TextEncoder();
   const data = encoder.encode(password);
   const hashBuffer = await crypto.subtle.digest('SHA-1', data);

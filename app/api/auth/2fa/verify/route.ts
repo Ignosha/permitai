@@ -1,6 +1,6 @@
-import { supabase } from '../../../../lib/supabase';
+import { supabase } from '../../../../../lib/supabase';
 import { NextRequest, NextResponse } from 'next/server';
-import { logAuditEvent } from '../../../../lib/audit';
+import { logAuditEvent } from '../../../../../lib/audit';
 
 export async function POST(request: NextRequest) {
   try {

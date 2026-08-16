@@ -5,8 +5,8 @@ import { logAuditEvent } from '../../../../lib/audit';
 
 const rateLimit = withRateLimit(5, 15 * 60 * 1000);
 
-export async function POST(request: NextRequest) {
-  const rateLimitResponse = rateLimit(request);
+export async function POST(request: NextRequest): Promise<NextResponse> {
+  const rateLimitResponse = await rateLimit(request);
   if (rateLimitResponse) return rateLimitResponse;
 
   try {

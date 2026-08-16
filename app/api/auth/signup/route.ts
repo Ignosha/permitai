@@ -20,8 +20,8 @@ function validatePasswordStrength(password: string): { valid: boolean; feedback:
   };
 }
 
-export async function POST(request: NextRequest) {
-  const rateLimitResponse = rateLimit(request);
+export async function POST(request: NextRequest): Promise<NextResponse> {
+  const rateLimitResponse = await rateLimit(request);
   if (rateLimitResponse) return rateLimitResponse;
 
   try {
